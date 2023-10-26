@@ -19,8 +19,13 @@
       "bun-types" // add Bun global
     ],
     "outDir": "./lib",
+    "esModuleInterop": true,
   },
   "include": [
     "./src"
-  ]
+  ],
+  "ts-node": {
+    // Tell ts-node CLI to install the --loader automatically
+    "esm": true
+  }
 }

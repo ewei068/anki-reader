@@ -1,10 +1,12 @@
 {
   "name": "anki-reader",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "module": "./lib/src/index.js",
   "main": "./lib/src/index.js",
   "type": "module",
   "devDependencies": {
+    "@types/node-fetch": "^2.6.7",
+    "@types/sql.js": "^1.4.7",
     "@typescript-eslint/eslint-plugin": "^6.9.0",
     "bun-types": "latest",
     "eslint": "^8.52.0",
@@ -20,5 +22,12 @@
   "files": [
     "lib/"
   ],
-  "types": "./lib/src/index.d.ts"
+  "types": "./lib/src/index.d.ts",
+  "dependencies": {
+    "node-fetch": "2.6.1",
+    "sql.js": "^1.8.0"
+  },
+  "scripts": {
+    "build": "npx tsc -p tsconfig.json && npx ts-add-js-extension add --dir=lib"
+  }
 }
