@@ -1,8 +1,8 @@
 {
   "name": "anki-reader",
-  "version": "0.1.0",
-  "module": "index.ts",
-  "main": "index.ts",
+  "version": "0.1.1",
+  "module": "./lib/src/index.js",
+  "main": "./lib/src/index.js",
   "type": "module",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^6.9.0",
@@ -12,9 +12,13 @@
     "eslint-plugin-import": "^2.29.0",
     "eslint-plugin-n": "^16.2.0",
     "eslint-plugin-promise": "^6.1.1",
-    "typescript": "^5.2.2"
+    "typescript": "^4.8.4"
   },
   "peerDependencies": {
-    "typescript": "^5.0.0"
-  }
+    "typescript": "^4.0.0"
+  },
+  "files": [
+    "lib/"
+  ],
+  "types": "./lib/src/index.d.ts"
 }
