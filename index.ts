@@ -1,1 +1,4 @@
-console.log("Hello via Bun!");
+export function foo() {
+    console.log('bar');
+    return 'bar';
+}
