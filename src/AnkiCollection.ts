@@ -19,13 +19,15 @@ export class AnkiCollection {
 
     public getDecks(): Record<string, Deck> {
         if (this.decks != null) {
-            return this.decks;
+            return {
+                ...this.decks
+            };
         }
 
         const result = this.db.exec('SELECT decks FROM col');
         if (result == null || result.length === 0) {
             this.decks = {};
-            return this.decks;
+            return {};
         }
 
         const deckJsons: Record<string, any> = JSON.parse(result[0].values[0][0]?.toString() ?? '{}');
@@ -34,7 +36,9 @@ export class AnkiCollection {
             decks[deckId] = new Deck(deckId, deckJson, this.db);
         }
         this.decks = decks;
-        return decks;
+        return {
+            ...this.decks
+        };
     }
 
     public getCreationTime(): Date {
@@ -104,66 +108,86 @@ export class AnkiCollection {
 
     public getConfig(): any {
         if (this.config != null) {
-            return this.config;
+            return {
+                ...this.config
+            };
         }
 
         const result = this.db.exec('SELECT conf FROM col');
         if (result == null || result.length === 0) {
             this.config = {};
-            return this.config;
+            return {};
         }
 
         const config = JSON.parse(result[0].values[0][0]?.toString() ?? '{}');
         this.config = config;
-        return config;
+        return {
+            ...this.config
+        };
     }
 
     public getModels(): any {
         if (this.models != null) {
-            return this.models;
+            return {
+                ...this.models
+            };
         }
 
         const result = this.db.exec('SELECT models FROM col');
         if (result == null || result.length === 0) {
-            this.models = [];
-            return this.models;
+            this.models = {};
+            return {};
         }
 
         const models = JSON.parse(result[0].values[0][0]?.toString() ?? '{}');
         this.models = models;
-        return models;
+        return {
+            ...this.models
+        };
     }
 
     public getDconf(): any {
         if (this.dconf != null) {
-            return this.dconf;
+            return {
+                ...this.dconf
+            };
         }
 
         const result = this.db.exec('SELECT dconf FROM col');
         if (result == null || result.length === 0) {
-            this.dconf = [];
-            return this.dconf;
+            this.dconf = {};
+            return {
+                ...this.dconf
+            };
         }
 
         const dconf = JSON.parse(result[0].values[0][0]?.toString() ?? '{}');
         this.dconf = dconf;
-        return dconf;
+        return {
+            ...this.dconf
+        };
     }
 
     public getTags(): any {
         if (this.tags != null) {
-            return this.tags;
+            return {
+                ...this.tags
+            };
         }
 
         const result = this.db.exec('SELECT tags FROM col');
         if (result == null || result.length === 0) {
-            this.tags = [];
-            return this.tags;
+            this.tags = {};
+            return {
+                ...this.tags
+            };
         }
 
         const tags = JSON.parse(result[0].values[0][0]?.toString() ?? '{}');
         this.tags = tags;
-        return tags;
+        return {
+            ...this.tags
+        };
     }
 
     public getRawCollection(): Database {

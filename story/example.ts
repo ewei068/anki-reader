@@ -14,5 +14,8 @@ readFromUrl('http://127.0.0.1:8081/collection.anki2')
 
         for (const deck of Object.values(collection.getDecks())) {
             console.log('Deck:', deck.getRawDeck());
+            for (const card of Object.values(deck.getCards())) {
+                console.log('Card:', card.getRawCard());
+            }
         }
     });
