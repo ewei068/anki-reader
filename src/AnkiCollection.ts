@@ -1,11 +1,12 @@
 import { type Database } from 'sql.js';
+import { Deck } from './Deck';
 
 export class AnkiCollection {
     private readonly db: Database;
     private crt?: Date;
     private mod?: Date;
     private scm?: Date;
-    private decks?: any[];
+    private decks?: Record<string, Deck>;
     private version?: number;
     private config?: any;
     private models?: any;
@@ -16,18 +17,22 @@ export class AnkiCollection {
         this.db = db;
     }
 
-    public getDecks(): any {
+    public getDecks(): Record<string, Deck> {
         if (this.decks != null) {
             return this.decks;
         }
 
         const result = this.db.exec('SELECT decks FROM col');
         if (result == null || result.length === 0) {
-            this.decks = [];
+            this.decks = {};
             return this.decks;
         }
 
-        const decks = JSON.parse(result[0].values[0][0]?.toString() ?? '{}');
+        const deckJsons: Record<string, any> = JSON.parse(result[0].values[0][0]?.toString() ?? '{}');
+        const decks: Record<string, any> = {};
+        for (const [deckId, deckJson] of Object.entries(deckJsons)) {
+            decks[deckId] = new Deck(deckId, deckJson, this.db);
+        }
         this.decks = decks;
         return decks;
     }
