@@ -6,6 +6,8 @@ export class Deck {
     private readonly deckJson: any;
     private readonly db: Database;
     private cards?: Record<string, Card>;
+    private name?: string;
+    private desc?: string;
 
     constructor(id: string, deckJson: any, db: Database) {
         this.id = id;
@@ -13,8 +15,8 @@ export class Deck {
         this.db = db;
     }
 
-    public getRawDeck(): any {
-        return this.deckJson;
+    public getId(): string {
+        return this.id;
     }
 
     public getCards(): Record<string, Card> {
@@ -27,7 +29,7 @@ export class Deck {
         // join cards on notes to get the card data
         // TODO: cards and notes share some fields, so we need to alias them
         const result = this.db.exec(`
-            SELECT * FROM cards
+            SELECT cards.*, flds, sfld, mid FROM cards
             JOIN notes ON notes.id = cards.nid
             WHERE cards.did = ${this.id}
         `);
@@ -45,11 +47,33 @@ export class Deck {
             }
             const id = cardData.id?.toString() ?? '';
 
-            cards[id] = new Card(id, cardData);
+            cards[id] = new Card(id, cardData, this.id);
         }
         this.cards = cards;
         return {
             ...this.cards
         };
+    }
+
+    public getName(): string {
+        if (this.name != null) {
+            return this.name;
+        }
+
+        this.name = this.deckJson.name ?? '';
+        return this.deckJson.name ?? '';
+    }
+
+    public getDescription(): string {
+        if (this.desc != null) {
+            return this.desc;
+        }
+
+        this.desc = this.deckJson.desc ?? '';
+        return this.deckJson.desc ?? '';
+    }
+
+    public getRawDeck(): any {
+        return this.deckJson;
     }
 }
