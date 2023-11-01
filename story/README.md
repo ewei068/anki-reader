@@ -7,7 +7,6 @@ bun install
 
 Then serve the anki files locally
 ```bash
-cd World_Capitals
 npx http-server --cors
 ```
 

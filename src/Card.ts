@@ -1,18 +1,23 @@
 import { type SqlValue } from 'sql.js';
+import { type AnkiCollection } from './AnkiCollection';
+import { type Model } from './Model';
 
 export class Card {
     private readonly id: string;
-    private readonly deckId: string;
     private readonly cardData: Record<string, SqlValue>;
+    private readonly collection: AnkiCollection;
+    private deckId?: string;
     private noteId?: string;
     private rawFields?: string;
-    private fields?: string[];
+    private orderedFields?: string[];
+    private fields?: Record<string, string>;
     private modelId?: string;
+    private model?: Model;
 
-    constructor(id: string, cardData: Record<string, SqlValue>, deckId: string) {
+    constructor(id: string, cardData: Record<string, SqlValue>, collection: AnkiCollection) {
         this.id = id;
         this.cardData = cardData;
-        this.deckId = deckId;
+        this.collection = collection;
     }
 
     public getId(): string {
@@ -20,6 +25,12 @@ export class Card {
     }
 
     public getDeckId(): string {
+        if (this.deckId != null) {
+            return this.deckId;
+        }
+
+        const result = this.cardData.did?.toString() ?? '';
+        this.deckId = result;
         return this.deckId;
     }
 
@@ -43,26 +54,50 @@ export class Card {
         return this.rawFields;
     }
 
-    public getFields(): string[] {
-        if (this.fields != null) {
+    public getOrderedFields(): string[] {
+        if (this.orderedFields != null) {
             return [
-                ...this.fields
+                ...this.orderedFields
             ];
         }
 
         const result = this.getRawFields().split('\x1f');
-        this.fields = result;
+        this.orderedFields = result;
         return [
-            ...this.fields
+            ...this.orderedFields
         ];
     }
 
+    public getFields(): Record<string, string> {
+        if (this.fields != null) {
+            return {
+                ...this.fields
+            };
+        }
+
+        const model = this.getModel();
+        const orderedFields = this.getOrderedFields();
+
+        const result: Record<string, string> = {};
+        for (let i = 0; i < orderedFields.length; i++) {
+            if (i >= model.getFields().length) {
+                break;
+            }
+            result[model.getFields()[i].name] = orderedFields[i];
+        }
+
+        this.fields = result;
+        return {
+            ...this.fields
+        };
+    }
+
     public getFront(): string {
-        return this.getFields()[0];
+        return this.getOrderedFields()[0];
     }
 
     public getBack(): string {
-        return this.getFields()[1];
+        return this.getOrderedFields()[1];
     }
 
     public getModelId(): string {
@@ -73,6 +108,16 @@ export class Card {
         const result = this.cardData.mid?.toString() ?? '';
         this.modelId = result;
         return this.modelId;
+    }
+
+    public getModel(): Model {
+        if (this.model != null) {
+            return this.model;
+        }
+
+        const result = this.collection.getModels()[this.getModelId()];
+        this.model = result;
+        return this.model;
     }
 
     public getRawCard(): any {

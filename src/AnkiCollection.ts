@@ -34,7 +34,7 @@ export class AnkiCollection {
         const deckJsons: Record<string, any> = JSON.parse(result[0].values[0][0]?.toString() ?? '{}');
         const decks: Record<string, any> = {};
         for (const [deckId, deckJson] of Object.entries(deckJsons)) {
-            decks[deckId] = new Deck(deckId, deckJson, this.db);
+            decks[deckId] = new Deck(deckId, deckJson, this);
         }
         this.decks = decks;
         return {

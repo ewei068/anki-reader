@@ -1,18 +1,19 @@
-import { type SqlValue, type Database } from 'sql.js';
+import { type SqlValue } from 'sql.js';
 import { Card } from './Card';
+import { type AnkiCollection } from './AnkiCollection';
 
 export class Deck {
     private readonly id: string;
     private readonly deckJson: any;
-    private readonly db: Database;
+    private readonly collection: AnkiCollection;
     private cards?: Record<string, Card>;
     private name?: string;
     private desc?: string;
 
-    constructor(id: string, deckJson: any, db: Database) {
+    constructor(id: string, deckJson: any, collection: AnkiCollection) {
         this.id = id;
         this.deckJson = deckJson;
-        this.db = db;
+        this.collection = collection;
     }
 
     public getId(): string {
@@ -28,7 +29,8 @@ export class Deck {
 
         // join cards on notes to get the card data
         // TODO: cards and notes share some fields, so we need to alias them
-        const result = this.db.exec(`
+        const db = this.collection.getRawCollection();
+        const result = db.exec(`
             SELECT cards.*, flds, sfld, mid FROM cards
             JOIN notes ON notes.id = cards.nid
             WHERE cards.did = ${this.id}
@@ -47,7 +49,7 @@ export class Deck {
             }
             const id = cardData.id?.toString() ?? '';
 
-            cards[id] = new Card(id, cardData, this.id);
+            cards[id] = new Card(id, cardData, this.collection);
         }
         this.cards = cards;
         return {
