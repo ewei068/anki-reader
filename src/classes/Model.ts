@@ -1,4 +1,4 @@
-interface IModelField {
+export interface IModelField {
     name: string
     ord: number
     font: string
@@ -6,7 +6,7 @@ interface IModelField {
     sticky: boolean
 }
 
-interface IModelTemplate {
+export interface IModelTemplate {
     afmt: string
     bafmt: string
     bqfmt: string

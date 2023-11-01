@@ -1,7 +1,7 @@
 // Load the sql.js library
 import initSqlJs from 'sql.js';
 import fetch from 'node-fetch';
-import { AnkiCollection } from './AnkiCollection';
+import { AnkiCollection } from './classes/AnkiCollection';
 
 interface IOptions {
     sqlConfig?: Partial<EmscriptenModule>

@@ -1,6 +1,7 @@
 import { type SqlValue } from 'sql.js';
 import { type AnkiCollection } from './AnkiCollection';
 import { type Model } from './Model';
+import { Question } from './Question';
 
 export class Card {
     private readonly id: string;
@@ -13,6 +14,7 @@ export class Card {
     private fields?: Record<string, string>;
     private modelId?: string;
     private model?: Model;
+    private questions?: Question[];
 
     constructor(id: string, cardData: Record<string, SqlValue>, collection: AnkiCollection) {
         this.id = id;
@@ -118,6 +120,26 @@ export class Card {
         const result = this.collection.getModels()[this.getModelId()];
         this.model = result;
         return this.model;
+    }
+
+    public getQuestions(): Question[] {
+        if (this.questions != null) {
+            return [
+                ...this.questions
+            ];
+        }
+
+        const questions: Question[] = [];
+        const model = this.getModel();
+        const fields = this.getFields();
+        for (const template of model.getTemplates()) {
+            questions.push(new Question(fields, template, model));
+        }
+
+        this.questions = questions;
+        return [
+            ...this.questions
+        ];
     }
 
     public getRawCard(): any {
