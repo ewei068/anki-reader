@@ -1,6 +1,6 @@
 import { readFromUrl } from '../src/index';
 
-readFromUrl('http://127.0.0.1:8081/collection.anki2')
+readFromUrl('http://127.0.0.1:8081/Amino_Acid_Flashcards/collection.anki2')
     .then(collection => {
         console.log('Creation time:', collection.getCreationTime());
         console.log('Modification time:', collection.getModificationTime());
@@ -24,5 +24,13 @@ readFromUrl('http://127.0.0.1:8081/collection.anki2')
                 console.log('Note ID:', card.getNoteId());
                 console.log('Model ID:', card.getModelId());
             }
+        }
+
+        for (const [modelId, model] of Object.entries(collection.getModels())) {
+            console.log('Model:', modelId);
+            console.log('Name:', model.getName());
+            console.log('Fields:', model.getFields());
+            console.log('Templates:', model.getTemplates());
+            console.log('CSS:', model.getCss());
         }
     });

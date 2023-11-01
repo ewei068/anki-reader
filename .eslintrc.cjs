@@ -23,6 +23,8 @@ module.exports = {
     "rules": {
         "@typescript-eslint/space-before-function-paren": [0],
         "@typescript-eslint/indent": [0],
-        "@typescript-eslint/semi": [2, "always"]
+        "@typescript-eslint/semi": [2, "always"],
+        // eslint is being really stupid and isn't detecting when i reassign stuff
+        "@typescript-eslint/prefer-readonly": [0],
     }
 }

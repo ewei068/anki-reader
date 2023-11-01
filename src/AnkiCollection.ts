@@ -1,5 +1,6 @@
 import { type Database } from 'sql.js';
 import { Deck } from './Deck';
+import { Model } from './Model';
 
 export class AnkiCollection {
     private readonly db: Database;
@@ -9,7 +10,7 @@ export class AnkiCollection {
     private decks?: Record<string, Deck>;
     private version?: number;
     private config?: any;
-    private models?: any;
+    private models?: Record<string, Model>;
     private dconf?: any;
     private tags?: any;
 
@@ -126,7 +127,7 @@ export class AnkiCollection {
         };
     }
 
-    public getModels(): any {
+    public getModels(): Record<string, Model> {
         if (this.models != null) {
             return {
                 ...this.models
@@ -139,8 +140,13 @@ export class AnkiCollection {
             return {};
         }
 
-        const models = JSON.parse(result[0].values[0][0]?.toString() ?? '{}');
-        this.models = models;
+        const modelJsons = JSON.parse(result[0].values[0][0]?.toString() ?? '{}');
+        const models: Record<string, Model> = {};
+        for (const [modelId, modelJson] of Object.entries(modelJsons)) {
+            models[modelId] = new Model(modelId, modelJson);
+            this.models = models;
+        }
+
         return {
             ...this.models
         };
