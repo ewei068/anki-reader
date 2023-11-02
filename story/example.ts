@@ -19,10 +19,15 @@ readFromUrl('http://127.0.0.1:8081/Amino_Acid_Flashcards/collection.anki2')
             for (const card of Object.values(deck.getCards()).slice(0, 10)) {
                 console.log('Card:', card.getRawCard());
                 console.log('Fields:', card.getFields());
-                console.log('Front:', card.getFront());
-                console.log('Back:', card.getBack());
-                console.log('Note ID:', card.getNoteId());
+                //console.log('Front:', card.getFront());
+                //console.log('Back:', card.getBack());
+                //console.log('Note ID:', card.getNoteId());
                 console.log('Model ID:', card.getModelId());
+
+                for (const question of card.getQuestions()) {
+                    console.log('Question:', question.getQuestion().formattedString);
+                    console.log('Answer:', question.getAnswer().formattedString);
+                }
             }
         }
 

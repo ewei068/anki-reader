@@ -133,7 +133,11 @@ export class Card {
         const model = this.getModel();
         const fields = this.getFields();
         for (const template of model.getTemplates()) {
-            questions.push(new Question(fields, template, model));
+            const question = new Question(fields, template, model);
+            if (question.getQuestionString() === '') {
+                continue;
+            }
+            questions.push(question);
         }
 
         this.questions = questions;
