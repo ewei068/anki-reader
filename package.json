@@ -8,6 +8,7 @@
     "@types/node-fetch": "^2.6.7",
     "@types/sql.js": "^1.4.7",
     "@typescript-eslint/eslint-plugin": "^6.9.0",
+    "blob-polyfill": "^7.0.20220408",
     "bun-types": "latest",
     "eslint": "^8.52.0",
     "eslint-config-standard-with-typescript": "^39.1.1",

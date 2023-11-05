@@ -1,10 +1,13 @@
 import 'web-streams-polyfill'; // Polyfill TransformStream globally
 import 'isomorphic-fetch'; // Polyfill fetch globally
+import { Blob } from 'blob-polyfill'; // Polyfill Blob globally
+globalThis.Blob = Blob;
 
 import { readAnkiPackageFromUrl, readAnkiPackage } from '../lib/src/index.js';
 
 readAnkiPackageFromUrl('http://127.0.0.1:8081/Amino_Acid_Flashcards.apkg')
-    .then(collection => {
+    .then(extractedPackage => {
+        const { collection, media } = extractedPackage;
         console.log('Creation time:', collection.getCreationTime());
         console.log('Modification time:', collection.getModificationTime());
         console.log('Schema modification time:', collection.getSchemaModificationTime());
@@ -41,11 +44,19 @@ readAnkiPackageFromUrl('http://127.0.0.1:8081/Amino_Acid_Flashcards.apkg')
             console.log('Templates:', model.getTemplates());
             console.log('CSS:', model.getCss());
         }
+
+        for (const [name, blob] of Object.entries(media)) {
+            console.log(name, blob);
+        }
     });
 
 fetch('http://127.0.0.1:8081/Amino_Acid_Flashcards.apkg')
     .then(res => res.blob())
     .then(buffer => readAnkiPackage(buffer))
-    .then(collection => {
+    .then(extractedPackage => {
+        const { collection, media } = extractedPackage;
         console.log('Creation time:', collection.getCreationTime());
+        for (const [name, blob] of Object.entries(media)) {
+            console.log(name, blob);
+        }
     });
