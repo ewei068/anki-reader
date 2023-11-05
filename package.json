@@ -1,6 +1,15 @@
 {
   "name": "anki-reader",
-  "version": "0.2.3",
+  "description": "A library for reading Anki apkg and collection files.",
+  "keywords": [
+    "anki",
+    "apkg",
+    "collection",
+    "reader",
+    "anki-reader",
+    "flashcards"
+  ],
+  "version": "0.3.0",
   "module": "./lib/src/index.js",
   "main": "./lib/src/index.js",
   "type": "module",

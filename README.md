@@ -3,7 +3,7 @@
 [![npm version](https://img.shields.io/npm/v/anki-reader.svg?style=flat-square)](https://www.npmjs.org/package/anki-reader)
 [![npm downloads](https://img.shields.io/npm/dm/anki-reader.svg?style=flat-square)](https://npm-stat.com/charts.html?package=anki-reader)
 
-A `.anki2` file reader module. Compatable node, bun, and browser runtimes. Will support `apkg` files soon!
+A `.apkg` and `.anki2` file reader module. Compatable node, bun, and browser runtimes.
 
 ## Usage
 
@@ -21,19 +21,25 @@ $ bun install anki-reader
 
 ### Usage
 
-After installation, pass in `.anki2` files as array buffers to `readAnkiCollections`, which returns a collection object. With the collection object, you can retrieve its information, decks, and cards like so:
+After installation, pass in `.apkg` or `.anki2` files to their reader functions. This returns a collection object, which can be used to retrieve deck and card information. Additionally, if a `.apkg` file is returned, media files are also extracted.
 ```js
-import { readAnkiCollection } from 'anki-reader';
+import { readAnkiPackage } from 'anki-reader';
 
 const ankiFile = ...
-readAnkiCollection(ankiFile)
-  .then((collection) => {
+readAnkiPackage(ankiFile)
+  .then((extractedPackage) => {
+    const { collection, media } = extractedPackage;
+
     const decks = collection.getDecks();
     for (const [deckId, deck] of Object.entries(decks)) {
       console.log(deckId, deck.getRawDeck());
       for (const [cardId, card] of Object.entries(deck.getCards())) {
         console.log(cardId, card.getRawCard());
       }
+    }
+
+    for (const [name, blob] of Object.entries(media)) {
+      console.log(name, blob);
     }
   })
 ```
